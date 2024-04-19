@@ -3,6 +3,7 @@ spring:
     name: spring-boot-vault-integration-demo
   cloud:
     vault:
+      authentication: TOKEN
       host: localhost
       port: 8200
       #      token: 0000-0000-0000-0000
@@ -11,6 +12,14 @@ spring:
       kv:
         backend: kv
         default-context: credentials
+  jpa:
+    hibernate:
+      ddl-auto: none
+    datasource:
+      driver-class-name: org.postgresql.Driver
+      url: 'jdbc:postgresql://localhost:5432/springboobs'
+      username: ${user-db}
+      password: ${pass-db}
   config:
     import: optional:vault://
 
