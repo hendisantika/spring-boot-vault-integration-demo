@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: spring-boot-vault-integration-demo
+  cloud:
+    vault:
+      host: localhost
+      port: 8200
+      token: 0000-0000-0000-0000
+      scheme: http
+      kv:
+        backend: kv
+        default-context: credentials
+  config:
+    import: optional:vault://
+
+external-api:
+  uri: https://external-api-demo.com/v1/
