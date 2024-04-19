@@ -6,8 +6,7 @@ spring:
       authentication: TOKEN
       host: localhost
       port: 8200
-      #      token: 0000-0000-0000-0000
-      token: hvs.j0T41Gr0vMMub9dXnGcHkIzL
+      token: 0000-0000-0000-0000
       scheme: http
       kv:
         backend: kv
