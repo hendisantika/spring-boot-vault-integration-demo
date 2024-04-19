@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.vault.core.VaultOperations;
 import org.springframework.vault.support.Ciphertext;
 import org.springframework.vault.support.Plaintext;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,5 +36,18 @@ public class ChildController {
                 .encrypt("nik", Plaintext.of(childReq.getParentName()));
         child.setParentName(encryptedParent.getCiphertext());
         return childRepository.save(child);
+    }
+
+    @GetMapping("get")
+    Child get(@RequestParam int id) {
+        Child child = childRepository.getById(id);
+        Plaintext decryptedParent = vaultOperations.opsForTransit()
+                .decrypt("nik", Ciphertext.of(child.getParentName()));
+
+        Child result = new Child();
+        result.setId(child.getId());
+        result.setName(child.getName());
+        result.setParentName(decryptedParent.asString());
+        return result;
     }
 }
