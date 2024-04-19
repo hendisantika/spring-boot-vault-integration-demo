@@ -3,6 +3,7 @@ package id.my.hendisantika.springbootvaultintegrationdemo.controller;
 import id.my.hendisantika.springbootvaultintegrationdemo.model.Child;
 import id.my.hendisantika.springbootvaultintegrationdemo.repository.ChildRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.vault.core.VaultOperations;
 import org.springframework.vault.support.Ciphertext;
 import org.springframework.vault.support.Plaintext;
@@ -11,6 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,7 +46,7 @@ public class ChildController {
     }
 
     @GetMapping("get")
-    Child get(@RequestParam int id) {
+    public Child get(@RequestParam int id) {
         Child child = childRepository.getById(id);
         Plaintext decryptedParent = vaultOperations.opsForTransit()
                 .decrypt("nik", Ciphertext.of(child.getParentName()));
@@ -49,5 +56,17 @@ public class ChildController {
         result.setName(child.getName());
         result.setParentName(decryptedParent.asString());
         return result;
+    }
+
+    @SneakyThrows
+    @GetMapping("encryptFile")
+    public void encryptFile() {
+        File file = new File("/Users/hendisantika/Desktop/Images/jvm.jpg");
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        Ciphertext encrypt = vaultOperations.opsForTransit()
+                .encrypt("nik", Plaintext.of(bytes));
+        byte[] context = encrypt.getCiphertext().getBytes(StandardCharsets.UTF_8);
+        OutputStream outputStream = new FileOutputStream("/Users/hendisantika/Desktop/Images/jvm.jpg.enc");
+        outputStream.write(context);
     }
 }
