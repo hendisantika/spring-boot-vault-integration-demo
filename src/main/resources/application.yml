@@ -5,7 +5,8 @@ spring:
     vault:
       host: localhost
       port: 8200
-      token: 0000-0000-0000-0000
+      #      token: 0000-0000-0000-0000
+      token: hvs.j0T41Gr0vMMub9dXnGcHkIzL
       scheme: http
       kv:
         backend: kv
