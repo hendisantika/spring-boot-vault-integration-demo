@@ -53,3 +53,35 @@ Vault v1.16.1 (6b5986790d7748100de77f7f127119c4a0f78946), built 2024-04-03T12:35
 2024-04-19T09:03:32.324+07:00  INFO 74487 --- [spring-boot-vault-integration-demo] [           main] pringBootVaultIntegrationDemoApplication : External Api URI : https://external-api-demo.com/v1/ 
 2024-04-19T09:03:32.324+07:00  INFO 74487 --- [spring-boot-vault-integration-demo] [           main] pringBootVaultIntegrationDemoApplication : External Api Key : Naruto2024! 
 ```
+
+POST http://localhost:8080/save
+Content-Type: application/json
+
+```json
+{
+  "name": "yuji",
+  "parentName": "1234567890"
+}
+
+```
+
+###
+
+GET http://localhost:8080/get?id=1
+
+```json
+
+{
+  "id": 1,
+  "name": "yuji",
+  "parentName": "1234567890"
+}
+```
+
+###
+
+GET http://localhost:8080/encryptFile
+
+###
+
+GET http://localhost:8080/decryptFile

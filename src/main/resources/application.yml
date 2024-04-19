@@ -12,14 +12,16 @@ spring:
       kv:
         backend: kv
         default-context: credentials
+  #        application-name: auth
   jpa:
     hibernate:
-      ddl-auto: none
-    datasource:
-      driver-class-name: org.postgresql.Driver
-      url: 'jdbc:postgresql://localhost:5432/springboobs'
-      username: ${user-db}
-      password: ${pass-db}
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: 'jdbc:postgresql://localhost:5432/springboobs'
+    username: ${user-db}
+    password: ${pass-db}
   config:
     import: optional:vault://
 
