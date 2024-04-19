@@ -69,4 +69,16 @@ public class ChildController {
         OutputStream outputStream = new FileOutputStream("/Users/hendisantika/Desktop/Images/jvm.jpg.enc");
         outputStream.write(context);
     }
+
+    @SneakyThrows
+    @GetMapping("decryptFile")
+    public void decryptFile() {
+        File file = new File("/Users/hendisantika/Desktop/Images/jvm.jpg.enc");
+        String string = Files.readString(file.toPath());
+        Plaintext encrypt = vaultOperations.opsForTransit()
+                .decrypt("nik", Ciphertext.of(string));
+        byte[] context = encrypt.getPlaintext();
+        OutputStream outputStream = new FileOutputStream("/Users/hendisantika/Desktop/Images/jvm.dec.jpg");
+        outputStream.write(context);
+    }
 }
