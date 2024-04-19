@@ -1,8 +1,13 @@
 package id.my.hendisantika.springbootvaultintegrationdemo.controller;
 
+import id.my.hendisantika.springbootvaultintegrationdemo.model.Child;
 import id.my.hendisantika.springbootvaultintegrationdemo.repository.ChildRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.vault.core.VaultOperations;
+import org.springframework.vault.support.Ciphertext;
+import org.springframework.vault.support.Plaintext;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,4 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChildController {
     private final ChildRepository childRepository;
     private final VaultOperations vaultOperations;
+
+    @PostMapping("save")
+    public Child save(@RequestBody Child childReq) {
+        Child child = new Child();
+        child.setName(childReq.getName());
+        Ciphertext encryptedParent = vaultOperations.opsForTransit()
+                .encrypt("nik", Plaintext.of(childReq.getParentName()));
+        child.setParentName(encryptedParent.getCiphertext());
+        return childRepository.save(child);
+    }
 }
